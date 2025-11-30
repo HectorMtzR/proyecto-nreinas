@@ -1,0 +1,125 @@
+:root {
+  --board-border: #4d3525;
+  --cell-light: #f0d9b5;
+  --cell-dark: #b58863;
+  --queen-color: #000;
+  --highlight-color: rgba(255, 255, 0, 0.5); /* Para resaltar el último movimiento si quisieras */
+}
+
+/* Contenedor principal para centrar todo */
+.game-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: #f4f4f4;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  padding: 20px;
+}
+
+/* Panel de controles (Inputs y Botones) */
+.controls-panel {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  margin-bottom: 20px;
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.input-n {
+  padding: 8px;
+  border: 2px solid #ddd;
+  border-radius: 6px;
+  width: 60px;
+  font-size: 1rem;
+  text-align: center;
+}
+
+.btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: transform 0.1s, background-color 0.2s;
+}
+
+.btn-primary { background-color: #2563eb; color: white; }
+.btn-secondary { background-color: #4b5563; color: white; }
+.btn-success { background-color: #16a34a; color: white; }
+
+.btn:hover { transform: translateY(-2px); opacity: 0.9; }
+.btn:disabled { background-color: #ccc; cursor: not-allowed; transform: none; }
+
+/* El Tablero */
+.board-container {
+  /* Esto asegura que el tablero no crezca infinitamente en pantallas grandes */
+  width: 100%;
+  max-width: 500px; 
+  /* Mantiene el tablero cuadrado automáticamente */
+  aspect-ratio: 1 / 1; 
+  border: 8px solid var(--board-border);
+  border-radius: 4px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  background-color: var(--board-border);
+}
+
+.board-grid {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  /* Las columnas se definen inline en React */
+}
+
+/* Celdas individuales */
+.cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Esto asegura que el contenido no estire la celda */
+  overflow: hidden; 
+  position: relative;
+  /* Forzamos que la celda respete el grid */
+  width: 100%;
+  height: 100%;
+}
+
+/* Lógica de colores del tablero (Ajedrez) */
+.cell.light { background-color: var(--cell-light); }
+.cell.dark { background-color: var(--cell-dark); }
+
+/* La Reina */
+.queen {
+  animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  user-select: none;
+  /* Usamos un tamaño relativo al viewport o a la celda */
+  font-size: clamp(1rem, 4.5vw, 2.5rem); 
+  filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.5));
+  
+  /* ESTOS SON LOS CAMBIOS IMPORTANTES: */
+  line-height: 1;       /* Elimina espacio vertical extra */
+  margin-top: -5%;      /* Pequeño ajuste visual para centrado óptico */
+  width: 100%;
+  text-align: center;
+}
+
+/* Animación de entrada "Pop" */
+@keyframes popIn {
+  0% { transform: scale(0); opacity: 0; }
+  80% { transform: scale(1.2); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* Información de estado */
+.status-bar {
+  margin-top: 15px;
+  font-size: 1.1rem;
+  color: #333;
+  text-align: center;
+}

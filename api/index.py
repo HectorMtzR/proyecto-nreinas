@@ -80,7 +80,7 @@ def procesar_n_reinas(dim: int):
     }
 
 # Endpoint con nombres cambiados
-@app.post("/api/solu")
+@app.post("/api/solve")
 def ejecutar_solver(datos: PeticionReinas):
     # Validación movida a una variable para cambiar la estructura visual
     es_tamano_invalido = datos.n < 4 or datos.n > 12

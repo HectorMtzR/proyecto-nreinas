@@ -15,50 +15,50 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-class SolverRequest(BaseModel):
+class solurRequest(BaseModel):
     n: int
 
 # Algoritmo de Backtracking Visual
-def solve_n_queens_visual(n: int):
-    board = [[0 for _ in range(n)] for _ in range(n)]
+def sol_nreinas(n: int):
+    tablero = [[0 for _ in range(n)] for _ in range(n)]
     steps = [] # La "película" de la ejecución
     
     def snapshot():
-        steps.append(copy.deepcopy(board))
+        steps.append(copy.deepcopy(tablero))
 
-    def is_safe(row, col):
+    def seguro(row, col):
         # Izquierda
         for i in range(col):
-            if board[row][i] == 1: return False
+            if tablero[row][i] == 1: return False
         # Diagonal superior izq
         for i, j in zip(range(row, -1, -1), range(col, -1, -1)):
-            if board[i][j] == 1: return False
+            if tablero[i][j] == 1: return False
         # Diagonal inferior izq
         for i, j in zip(range(row, n, 1), range(col, -1, -1)):
-            if board[i][j] == 1: return False
+            if tablero[i][j] == 1: return False
         return True
 
-    def solve(col):
+    def solu(col):
         if col >= n: return True
 
         for i in range(n):
-            if is_safe(i, col):
-                board[i][col] = 1 # Poner reina
+            if seguro(i, col):
+                tablero[i][col] = 1 # Poner reina
                 snapshot()
                 
-                if solve(col + 1): return True
+                if solu(col + 1): return True
                 
-                board[i][col] = 0 # Backtracking (Quitar reina)
+                tablero[i][col] = 0 # Backtracking (Quitar reina)
                 snapshot()
 
         return False
 
-    solve(0)
+    solu(0)
     # Agregamos un paso final vacío si no hubo solución o para estabilidad
-    return {"steps": steps, "solved": len(steps) > 0}
+    return {"steps": steps, "solud": len(steps) > 0}
 
-@app.post("/api/solve")
-def solve_endpoint(request: SolverRequest):
+@app.post("/api/solu")
+def solu_endpoint(request: solurRequest):
     if request.n < 4 or request.n > 12:
         raise HTTPException(status_code=400, detail="N debe estar entre 4 y 12")
-    return solve_n_queens_visual(request.n)
+    return sol_nreinas(request.n)

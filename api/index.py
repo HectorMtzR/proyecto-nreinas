@@ -9,10 +9,10 @@ app = FastAPI()
 # Configuración CORS para que el Frontend local (puerto 5173) pueda hablar con el Backend (puerto 8000)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], # En producción puedes restringirlo a tu dominio
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    permitir_origenes=["*"], # En producción puedes restringirlo a tu dominio
+    permitir_credenciales=True,
+    permitir_metodos=["*"],
+    permitir_encabezados=["*"],
 )
 
 class solurRequest(BaseModel):
@@ -20,35 +20,36 @@ class solurRequest(BaseModel):
 
 # Algoritmo de Backtracking Visual
 def sol_nreinas(n: int):
-    tablero = [[0 for _ in range(n)] for _ in range(n)]
+    tablero = [[0 for _ in range(n)] 
+               for _ in range(n)]
     steps = [] # La "película" de la ejecución
     
     def snapshot():
         steps.append(copy.deepcopy(tablero))
 
-    def seguro(row, col):
+    def seguro(fila, columna):
         # Izquierda
-        for i in range(col):
-            if tablero[row][i] == 1: return False
+        for i in range(columna):
+            if tablero[fila][i] == 1: return False
         # Diagonal superior izq
-        for i, j in zip(range(row, -1, -1), range(col, -1, -1)):
+        for i, j in zip(range(fila, -1, -1), range(columna, -1, -1)):
             if tablero[i][j] == 1: return False
         # Diagonal inferior izq
-        for i, j in zip(range(row, n, 1), range(col, -1, -1)):
+        for i, j in zip(range(fila, n, 1), range(columna, -1, -1)):
             if tablero[i][j] == 1: return False
         return True
 
-    def solu(col):
-        if col >= n: return True
+    def solu(columna):
+        if columna >= n: return True
 
         for i in range(n):
-            if seguro(i, col):
-                tablero[i][col] = 1 # Poner reina
+            if seguro(i, columna):
+                tablero[i][columna] = 1 # Poner reina
                 snapshot()
                 
-                if solu(col + 1): return True
+                if solu(columna + 1): return True
                 
-                tablero[i][col] = 0 # Backtracking (Quitar reina)
+                tablero[i][columna] = 0 # Backtracking (Quitar reina)
                 snapshot()
 
         return False
